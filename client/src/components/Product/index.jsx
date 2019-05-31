@@ -3,8 +3,10 @@ import React from 'react';
 const Product = (props) => {
     return (
         <div>
-            {/* <img></img> */}
-            {props.item}
+            <span>{props.image}</span>
+            <span>{props.price}</span>
+            <span>{props.description}</span>
+            <span>{props.free_shipping}</span>
         </div>
     );
 };

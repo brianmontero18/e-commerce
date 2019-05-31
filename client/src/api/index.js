@@ -1,6 +1,6 @@
 var url = 'https://api.mercadolibre.com/';
 
-export const getProductDetails = () => {
+export const getQueryResult = (query) => {
   return fetch(`${url}/sites/MLA/search?q=:${query}`, {
     method: 'GET',
     headers: {
@@ -8,23 +8,19 @@ export const getProductDetails = () => {
     }
   }).then(res => res.json())
     .catch(error => console.error('Error:', error))
-    .then(response => response);
+    .then(processMessages);
 };
 
 const processMessages = (message) => {
-
-  
   return {
     author: {
       name: 'Brian',
       lastname: 'Montero'
     },
-    categories: [
-
-    ],
-    items: message.result.slice(0, 4).map(getItem)
+    categories: getCategory(message),
+    items: message.results.slice(0, 4).map(getItem)
   }
-}
+};
 
 const getItem = (item, index) => {
   return {
@@ -41,6 +37,25 @@ const getItem = (item, index) => {
   }
 };
 
-const getCategory = () => {
+const getCategory = (message) => {
+  var categories = [];
 
+  message.filters.forEach(filter => {
+    if(filter.id === 'category') {
+      filter.values.forEach(value => {
+        value.path_from_root.forEach(root => {
+          if(value.id !== root.id) {
+            categories.push(root.name);
+          }
+        });
+        categories.push(value.name);
+      });
+
+      return categories;
+    } else {
+      categories.push(filter.values[0].name);
+    }
+  });
+
+  return categories;
 };

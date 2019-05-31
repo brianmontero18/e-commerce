@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Input from '@material-ui/core/Input';
 import IconButton from '@material-ui/core/IconButton';
 import SearchIcon from '@material-ui/icons/Search';
+import * as Api from '../../api';
 
 const Search = () => {
     const [input, setInput] = useState(0);
@@ -11,8 +12,10 @@ const Search = () => {
         setInput(event.target.value);
     };
 
-    const onSubmit = (event) => {
+    const onSubmit = async (event) => {
         console.log('dispatch', input);
+        const result = await Api.getQueryResult(input);
+        console.log(result);
     };
     
     return (
