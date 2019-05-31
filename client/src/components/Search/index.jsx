@@ -3,6 +3,7 @@ import Input from '@material-ui/core/Input';
 import IconButton from '@material-ui/core/IconButton';
 import SearchIcon from '@material-ui/icons/Search';
 import * as Api from '../../api';
+import { connect } from 'react-redux';
 
 const Search = () => {
     const [input, setInput] = useState(0);
@@ -14,8 +15,8 @@ const Search = () => {
 
     const onSubmit = async (event) => {
         console.log('dispatch', input);
-        const result = await Api.getQueryResult(input);
-        console.log(result);
+        // const result = await Api.getQueryResult(input);
+        this.getQueryResult(input);
     };
     
     return (
@@ -33,4 +34,8 @@ const Search = () => {
     );
 };
 
-export default Search;
+const mapDispatchToProps = {
+    getQueryResult
+};
+
+export default connect(null, mapDispatchToProps)(Search);
