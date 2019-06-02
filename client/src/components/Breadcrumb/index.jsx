@@ -15,24 +15,24 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-function handleClick(event) {
-  event.preventDefault();
-  alert('You clicked a breadcrumb.');
-}
+// function handleClick(event) {
+//   event.preventDefault();
+//   alert('You clicked a breadcrumb.');
+// }
 
-function SimpleBreadcrumbs() {
+const SimpleBreadcrumbs = ({ categories }) => {
   const classes = useStyles();
+
   return (
     <div className={classes.root}>
       <Paper elevation={0} className={classes.paper}>
         <Breadcrumbs aria-label="Breadcrumb">
-          <Link color="inherit" href="/" onClick={handleClick}>
-            Material-UI
-          </Link>
-          <Link color="inherit" href="/getting-started/installation/" onClick={handleClick}>
-            Core
-          </Link>
-          <Typography color="textPrimary">Breadcrumb</Typography>
+          { categories && categories.map((item, index) =>
+            index === categories.length-1 ?
+              <Link key={index} color="inherit">{item}</Link>
+            :
+              <Typography key={index} color="textPrimary">{item}</Typography>
+          )}
         </Breadcrumbs>
       </Paper>
     </div>

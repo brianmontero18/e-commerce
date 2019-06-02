@@ -1,12 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import App from './App';
+import Routes from './routes/index';
 import { Provider } from 'react-redux';
-// import { Router, Rout, Switch } from 'react-router-dom';
-// import { createBrowserHistory } from 'history';
-// import { syncHistoryWithStore } from 'react-router-redux';
-import store, { sagaMiddleware } from './store';
+import { ConnectedRouter } from 'connected-react-router';
+import store, { sagaMiddleware, history } from './store';
 import sagas from './sagas';
 import * as serviceWorker from './serviceWorker';
 
@@ -14,7 +12,9 @@ sagaMiddleware.run(sagas);
 
 ReactDOM.render(
     <Provider store={store}>
-        <App />
+        <ConnectedRouter history={history}>
+            <Routes />
+        </ConnectedRouter>
     </Provider>,
     document.getElementById('root')
 );

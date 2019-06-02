@@ -1,61 +1,81 @@
-var url = 'https://api.mercadolibre.com/';
+var url = 'https://api.mercadolibre.com';
 
-export const getQueryResult = (query) => {
-  return fetch(`${url}/sites/MLA/search?q=:${query}`, {
+const fetchData = (endpoint, parameters, handler) => {
+  return fetch(`${url}${endpoint}${parameters}`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json'
     }
   }).then(res => res.json())
     .catch(error => console.error('Error:', error))
-    .then(processMessages);
+    .then(handler);
 };
+
+export const getQueryResult = (query) => fetchData('/sites/MLA/search?q=:', query, processMessages);
+export const getProductDetail = (id) => fetchData('/items/', id, processMessagesDetails);
 
 const processMessages = (message) => {
   return {
-    author: {
-      name: 'Brian',
-      lastname: 'Montero'
-    },
-    categories: getCategory(message),
-    items: message.results.slice(0, 4).map(getItem)
+    ...getAuthor(),
+    ...getCategories(message),
+    items: message.results.slice(0, 4).map((getItemProps))
   }
 };
 
-const getItem = (item, index) => {
+const processMessagesDetails = (message) => {
   return {
-    id: item.id,
-    title: item.title,
-    price: {
-      currency: item.currency_id,
-      amount: item.price,
-      decimals: item.installments.rate
-    },
-    picture: item.thumbnail,
-    condition: item.condition,
-    free_shipping: item.shipping.free_shipping 
+    ...getAuthor(),
+    item: {
+      ...getItemProps(message),
+      sold_quantity: message.sold_quantity,
+      description: message.description
+    }
   }
 };
 
-const getCategory = (message) => {
-  var categories = [];
+const getAuthor = () => ({
+  author: {
+    name: 'Brian',
+    lastname: 'Montero'
+  }
+});
 
-  message.filters.forEach(filter => {
-    if(filter.id === 'category') {
-      filter.values.forEach(value => {
-        value.path_from_root.forEach(root => {
-          if(value.id !== root.id) {
-            categories.push(root.name);
-          }
+const getItemProps = (item) => ({
+  id: item.id,
+  title: item.title,
+  price: {
+    currency: item.currency_id,
+    amount: item.price,
+    // decimals: item.installments.rate
+  },
+  picture: item.thumbnail,
+  condition: item.condition,
+  free_shipping: item.shipping.free_shipping
+});
+
+const getCategories = (message) => {
+  if(message.filters) {
+    var categories = [];
+
+    message.filters.forEach(filter => {
+      if(filter.id === 'category') {
+        filter.values.forEach(value => {
+          value.path_from_root.forEach(root => {
+            if(value.id !== root.id) {
+              categories.push(root.name);
+            }
+          });
+          categories.push(value.name);
         });
-        categories.push(value.name);
-      });
+  
+        return categories;
+      } else {
+        categories.push(filter.values[0].name);
+      }
+    });
 
-      return categories;
-    } else {
-      categories.push(filter.values[0].name);
-    }
-  });
-
-  return categories;
+    return {
+      categories
+    };
+  }
 };

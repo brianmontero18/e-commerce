@@ -1,8 +1,8 @@
 import { combineReducers } from 'redux';
-import { GET_QUERY_RESULT, } from '../appconstants';
+import { connectRouter } from 'connected-react-router';
 import hola from './hola';
-import createReducer from './util';
 
-export default combineReducers({
-    hola
+export default (history) => combineReducers({
+    hola,
+    router: connectRouter(history)
 });
