@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import SearchBox from '../../components/SearchBox';
 import { connect } from 'react-redux';
 import { getProductDetail } from '../../actions';
+import { getProductInfo } from '../../selectors';
+
 
 const ProductDetail = ({ getProductDetail, match, product }) => {
     useEffect(() => {
@@ -30,7 +32,7 @@ const ProductDetail = ({ getProductDetail, match, product }) => {
 };
 
 const mapStateToProps = (state) => ({
-    product: state.hola.productDetail
+    product: getProductInfo(state)
 });
 
 const mapDispatchToProps = {

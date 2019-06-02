@@ -2,11 +2,11 @@ import 'regenerator-runtime/runtime';
 import { all, takeLatest, call, put } from 'redux-saga/effects';
 import * as Actions from '../actions';
 import * as Types from '../appconstants';
-import * as Api from '../api';
+import { fetchApi } from '../api';
 
 function* getQueryResult(action) {
     try {
-        const result = yield call(Api.getQueryResult, action.query);
+        const result = yield call(fetchApi, '/testApi?q=', action.query);
         yield put(Actions.getQueryResultSuccess(result));
     } catch(error) {
         yield put(Actions.getQueryResultFail(error));
@@ -15,7 +15,7 @@ function* getQueryResult(action) {
 
 function* getProductDetail(action) {
     try {
-        const result = yield call(Api.getProductDetail, action.id);
+        const result = yield call(fetchApi, '/testApi/items/', action.id);
         yield put(Actions.getProductDetailSuccess(result));
     } catch(error) {
         yield put(Actions.getQueryResultFail(error));

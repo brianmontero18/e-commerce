@@ -4,14 +4,15 @@ import Breadcrumb from '../../components/Breadcrumb';
 import Product from '../../components/Product';
 import { connect } from 'react-redux';
 import { getQueryResult } from '../../actions';
+import { makeGetResult } from '../../selectors';
 
-const SearchResult = ({ getQueryResult, result, location }) => {
+const SearchResult = ({ getQueryResult, result, match, location }) => {
     const query = location.search.split('=')[1];
 
     useEffect(() => {
         getQueryResult(query);
         // eslint-disable-next-line
-    }, [getQueryResult]);
+    }, [getQueryResult || match.params]);
 
     const [searchValue, setSearchValue] = useState(query.split('%20').join(' '));
 
@@ -28,12 +29,16 @@ const SearchResult = ({ getQueryResult, result, location }) => {
     );
 };
 
-const mapStateToProps = (state) => ({
-    result: state.hola.result
-});
+const makeMapStateToProps = () => {
+    const getResult = makeGetResult();
+
+    return (state) => ({
+        result: getResult(state)
+    });
+};
 
 const mapDispatchToProps = {
     getQueryResult
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(SearchResult);
+export default connect(makeMapStateToProps, mapDispatchToProps)(SearchResult);
