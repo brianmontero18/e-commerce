@@ -4,9 +4,9 @@ import IconButton from '@material-ui/core/IconButton';
 import SearchIcon from '@material-ui/icons/Search';
 import { Link } from 'react-router-dom';
 
-const SearchBox = ({ value, onChange }) => {
+const SearchBox = ({ className, value, onChange }) => {
     return (
-        <div>
+        <div className={className}>
             <Input
                 placeholder="Nunca dejes de buscar"
                 // className={}

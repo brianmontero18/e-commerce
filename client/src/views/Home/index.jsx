@@ -1,13 +1,19 @@
-import React, { useState } from 'react';
-import SearchBox from '../../components/SearchBox';
+import React from 'react';
+import Header from '../../components/Header';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import Typography from '@material-ui/core/Typography';
+import Container from '@material-ui/core/Container';
 
 const Home = () => {
-    const [searchValue, setSearchValue] = useState('');
-
     return (
         <div>
-            <SearchBox value={searchValue} onChange={(value) => setSearchValue(value)}/>
-            <span>BIENVENIDOS A MELI</span>
+            <Header />
+            <React.Fragment>
+                <CssBaseline />
+                <Container maxWidth="lg">
+                    <Typography component="div" style={{ backgroundColor: '#cfe8fc', height: '100vh' }} />
+                </Container>
+            </React.Fragment>
         </div>
     );
 };
