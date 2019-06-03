@@ -12,7 +12,7 @@ const routes = [
   },
   {
     exact: true,
-    path: "/items",
+    path: "/items/",
     component: SearchResult
   },
   {

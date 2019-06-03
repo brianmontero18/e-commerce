@@ -12,15 +12,11 @@ const useStyles = makeStyles(theme => ({
   },
   paper: {
     padding: theme.spacing(1, 2),
-  },
+    backgroundColor: 'inherit'
+  }
 }));
 
-// function handleClick(event) {
-//   event.preventDefault();
-//   alert('You clicked a breadcrumb.');
-// }
-
-const SimpleBreadcrumbs = ({ categories }) => {
+const SimpleBreadcrumbs = ({ categories = [] }) => {
   const classes = useStyles();
 
   return (

@@ -1,30 +1,37 @@
-import React, { useEffect, useState } from 'react';
-import SearchBox from '../../components/SearchBox';
+import React, { useEffect, Fragment } from 'react';
+import Header from '../../components/Header';
+import Container from '@material-ui/core/Container';
 import Breadcrumb from '../../components/Breadcrumb';
 import Product from '../../components/Product';
+import Divider from '@material-ui/core/Divider';
 import { connect } from 'react-redux';
 import { getQueryResult } from '../../actions';
-import { makeGetResult } from '../../selectors';
+import { makeGetResult, getCategories, getFetchStatus } from '../../selectors';
 
-const SearchResult = ({ getQueryResult, result, match, location }) => {
+const SearchResult = ({ getQueryResult, result, match, location, categories, isFetching }) => {
     const query = location.search.split('=')[1];
 
     useEffect(() => {
         getQueryResult(query);
         // eslint-disable-next-line
-    }, [getQueryResult || match.params]);
-
-    const [searchValue, setSearchValue] = useState(query.split('%20').join(' '));
+    }, [match.params]);
 
     return (
         <div>
-            <SearchBox value={searchValue} onChange={(value) => setSearchValue(value)}/>
-            <Breadcrumb categories={result ? result.categories : []} />
-            <div>
-                { result && result.items.map((product, index) => (
-                    <Product key={index} item={product} />
-                ))}
-            </div>
+            <Header />
+            { !isFetching &&
+                <Container maxWidth="lg">
+                    <Breadcrumb categories={categories} />
+                    { result && result.items.map((product, index) => (
+                        <Fragment key={index}>
+                            <Product item={product} />
+                            { result.items.length - 1 !== index ?
+                                <Divider component="li" /> : null
+                            }
+                        </Fragment>
+                    ))}
+                </Container>
+            }
         </div>
     );
 };
@@ -33,7 +40,9 @@ const makeMapStateToProps = () => {
     const getResult = makeGetResult();
 
     return (state) => ({
-        result: getResult(state)
+        result: getResult(state),
+        categories: getCategories(state),
+        isFetching: getFetchStatus(state)
     });
 };
 

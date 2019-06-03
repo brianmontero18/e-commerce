@@ -1,7 +1,7 @@
 import 'regenerator-runtime/runtime';
 import { all, takeLatest, call, put } from 'redux-saga/effects';
 import * as Actions from '../actions';
-import * as Types from '../appconstants';
+import * as Types from '../types';
 import { fetchApi } from '../api';
 
 function* getQueryResult(action) {

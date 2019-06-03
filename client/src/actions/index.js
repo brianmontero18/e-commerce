@@ -1,4 +1,4 @@
-import * as Types from '../appconstants';
+import * as Types from '../types';
 
 export const getQueryResult = (query) => ({
     type: Types.GET_QUERY_RESULT, query
