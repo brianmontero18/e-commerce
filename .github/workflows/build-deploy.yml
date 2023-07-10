@@ -14,11 +14,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Moving to Client
-        run: cd client/
-
       - name: Checkout code
         uses: actions/checkout@v2
+
+      - name: Change to client directory
+        run: cd client
 
       - name: Installing Node.js
         uses: actions/setup-node@v1
